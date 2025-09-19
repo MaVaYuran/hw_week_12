@@ -3,19 +3,19 @@ import data from './data.json';
 import styles from './App.module.css';
 
 export const App = () => {
-	const [steps, setSteps] = useState(data);
+	const [steps] = useState(data);
 	const [activeIndex, setActiveIndex] = useState(0);
-	const onTheFirstStep = activeIndex === 0;
-	const onTheLastStep = activeIndex === steps.length - 1;
+	const isTheFirstStep = activeIndex === 0;
+	const isTheLastStep = activeIndex === steps.length - 1;
 
 	const onStepClick = (index) => setActiveIndex(index);
 	const onPreviousClick = () => {
-		if (!onTheFirstStep) {
+		if (!isTheFirstStep) {
 			setActiveIndex((prev) => prev - 1);
 		}
 	};
 	const onNextClick = () => {
-		if (!onTheLastStep) {
+		if (!isTheLastStep) {
 			setActiveIndex((prev) => prev + 1);
 		}
 	};
@@ -30,10 +30,10 @@ export const App = () => {
 				<div className={styles.steps}>
 					<div className={styles['steps-content']}>{steps[activeIndex]?.content}</div>
 					<ul className={styles['steps-list']}>
-						{steps.map((step, index) => (
+						{steps.map(({id, title}, index) => (
 							<li
 								className={`${styles['steps-item']} ${index === activeIndex ? styles.active : ''} ${index <= activeIndex ? styles.done : ''}`}
-								key={step.id}
+								key={id}
 							>
 								<button
 									className={styles['steps-item-button']}
@@ -41,7 +41,7 @@ export const App = () => {
 								>
 									{index + 1}
 								</button>
-								Шаг {index + 1}
+							 {title}
 							</li>
 						))}
 					</ul>
@@ -49,15 +49,15 @@ export const App = () => {
 						<button
 							className={styles.button}
 							onClick={onPreviousClick}
-							disabled={onTheFirstStep}
+							disabled={isTheFirstStep}
 						>
 							Назад
 						</button>
 						<button
 							className={styles.button}
-							onClick={onTheLastStep ? onStartClick : onNextClick}
+							onClick={isTheLastStep ? onStartClick : onNextClick}
 						>
-							{!onTheLastStep ? 'Вперёд' : 'Начать сначала'}
+							{!isTheLastStep ? 'Вперёд' : 'Начать сначала'}
 						</button>
 					</div>
 				</div>
